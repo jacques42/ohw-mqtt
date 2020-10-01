@@ -3,7 +3,7 @@
 */
 
 opsParameter = {  jsonurl:        "http://127.0.0.1:8085/data.json",
-                        mqttBroker:     "mqtt://172.16.35.48:1883",
+                        mqttBroker:     "mqtt://127.0.0.1:1883",
                         mqttAuth:       false,
                         mqttUsername:   "",
                         mqttPassword:   "",
@@ -22,10 +22,10 @@ const cliDefinition = [
     { name: 'mqttUsername', type: String, description: "Specify MQTT username to enable authentication"},
     { name: 'mqttPassword', type: String, description: "Specify MQTT Password for authentication. Defaults to an empty string"},
     { name: 'mqttTopic', type: String, description: "Specify MQTT topic to publish on. Hostname will be appended. Defaults to <"+ opsParameter.mqttTopic + ">"},
-    { name: 'raw', alias: 'r', type: Boolean, description: "Send OHM JSON data to MQTT as is. Any filter settings will be ignored."},
+    { name: 'raw', alias: 'r', type: Boolean, description: "Send raw JSON data to MQTT. Any filter settings will be ignored."},
     { name: 'frequency', alias: 'f', type: Number, description: "Frequency to publish to MQTT in [s]. Default is " + opsParameter.sendFrequency},
-    { name: 'filterID', type: String, description: "List of comma-separated IDs to filter. First item defines whether to allow (value = 1) or to deny (value = 0). Example: \"0,80,82\" blocks IDs 80 and 82" },
-    { name: 'filterList', type: String, description: "List of comma-separated strings to filter. First list item defines whether to allow (value = allow) or to deny (value = deny). Example: \"allow,Temperature, Mainboard\" allows where a node text contains those strings, including the full branch if any." },
+    { name: 'filterID', type: String, description: "List of comma-separated IDs to filter. First list item value defines whether list elements are allowed (value = 1) or denied (value = 0). Example: \"0,80,82\" denies measurement IDs 80 and 82" },
+    { name: 'filterList', type: String, description: "List of comma-separated strings to filter. First list item value defines whether list elements are allowed (value = allow) or denied (value = deny). Example: \"allow,Temperature, Mainboard\" allows measurements to be published where any node text in a given branch matches one of those strings" },
     { name: 'cleanValues', alias: 'c', type: Boolean, description: 'Clean measurement values from all non-numeric characters'  },
 ]
 
@@ -42,7 +42,7 @@ if (cliParameter.help) {
           optionList: cliDefinition
         },
         {
-          content: 'Project home: {underline https://github.com/me/example}'
+          content: 'Project home: {underline https://github.com/jacques42/ohw-mqtt}'
         }
       ])
       console.log(usage)
