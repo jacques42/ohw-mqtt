@@ -1,0 +1,26 @@
+{
+  "name": "ohw2mqtt",
+  "version": "1.0.0",
+  "description": "OpenHardwareMonitor data points JSON transferred to MQTT",
+  "main": "index.js",
+  "dependencies": {
+    "axios": "^0.20.0",
+    "command-line-args": "^5.1.1",
+    "command-line-usage": "^6.1.0",
+    "infinite-loop": "^0.2.2",
+    "lodash": "^4.17.20",
+    "mqtt": "^4.2.1",
+    "validator": "^13.1.17"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "OpenHardwareMonitor",
+    "MQTT",
+    "OHM"
+  ],
+  "author": "Jacques42",
+  "license": "ISC"
+}
