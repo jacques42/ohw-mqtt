@@ -1,4 +1,4 @@
-
+/* eslint-env node */
 
 /*
  ** Install Error Handler

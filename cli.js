@@ -1,3 +1,5 @@
+/* eslint-env node */
+
 /*
 ** Command Line Options
 */
