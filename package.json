@@ -1,5 +1,5 @@
 {
-  "name": "ohw-mqtt",
+  "name": "ohm-mqtt",
   "version": "0.1.0",
   "description": "Reads Open Hardware Monitor measurements from JSON export and publishes to MQTT broker",
   "main": "index.js",
@@ -8,6 +8,7 @@
     "command-line-args": "^5.1.1",
     "command-line-usage": "^6.1.0",
     "mqtt": "^4.2.1",
+    "node-windows": "^1.0.0-beta.5",
     "validator": "^13.1.17"
   },
   "devDependencies": {

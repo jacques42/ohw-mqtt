@@ -54,3 +54,34 @@ Command line options
 
   -c, --cleanValues        Clean measurement values from all non-numeric characters
 ```
+
+## Install as a Windows Service
+
+Installing as a Windows Service ensures the script starts at system start. To install / uninstall use the script `ohm-mqtt-service.js`.
+
+Known bug: if passing command line options through the command line (`--option`), the first option must not start with `--`. To work around this use such as `-c`or `-f` as first option in the list
+
+### Service installer script
+```
+ohm-mqtt-service
+
+  Install ohm-mqtt as a Windows Service, for start-up at boot time
+
+Options
+
+  -h, --help         Display this usage guide.
+  -i, --install      Install ohm-mqtt as Windows Service
+  -u, --uninstall    Uninstall ohm-mqtt Windows Service
+
+  --options string   Commandline options to pass to script
+                     Known bug: first parameter can not start with '--'. To work around use '-c'
+                     or '-f' as first parameter
+```
+
+### Example
+```
+node ohm-mqtt-service.js -i --options '-c --jsonurl http://10.0.0.10:8085/data.json \
+                                          --mqttBroker mqtt://10.0.0.11:1883 \
+                                          --mqttUsername username \
+                                          --mqttPassword password'
+```

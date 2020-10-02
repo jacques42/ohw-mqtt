@@ -36,15 +36,15 @@ const cliParameter = commandLineArgs(cliDefinition)
 if (cliParameter.help) {
   const usage = commandLineUsage([
     {
-      header: 'OWH2MQTT',
-      content: 'A simple tool to read OpenHardwareMonitor JSON data from it\'s webserver and publish to a MQTT server'
+      header: 'ohm-mqtt',
+      content: 'A simple tool to read Open Hardware Monitor JSON data from it\'s webserver and publish to a MQTT server'
     },
     {
       header: 'Options',
       optionList: cliDefinition
     },
     {
-      content: 'Project home: {underline https://github.com/jacques42/ohw-mqtt}'
+      content: 'Project home: {underline https://github.com/jacques42/ohm-mqtt}'
     }
   ])
   console.log(usage)

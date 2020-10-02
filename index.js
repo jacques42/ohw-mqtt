@@ -1,8 +1,4 @@
-/*
-** Defaults + Commandline
-*/
 
-const config = require('./cli.js')
 
 /*
  ** Install Error Handler
@@ -31,6 +27,12 @@ function handleError (error) {
 
   process.exit(1) // mandatory (as per the Node.js docs)
 }
+
+/*
+** Defaults + Commandline
+*/
+
+const config = require('./cli.js')
 
 /*
 ** Establish MQTT Server Connection
