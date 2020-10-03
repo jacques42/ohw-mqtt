@@ -91,6 +91,7 @@ function recursiveParser (string1, string2 = [], var1 = 0, array1 = []) {
   const level = var1
   let dataArray = array1
   const re = config.cleanValues ? new RegExp('[^0-9,]', 'g') : ''
+  const re2 = config.cleanValues ? new RegExp(',', 'g') : ''
 
   // Recursion clause
   for (var property in object) {
@@ -108,11 +109,9 @@ function recursiveParser (string1, string2 = [], var1 = 0, array1 = []) {
 
   // Exit clause - value field set means measurement found ( => tree leaf node)
   if (typeof object.Value !== 'undefined' && object.Value.length > 0) {
-    // if (config.cleanValues) { re = new RegExp('[^0-9,]', 'g') } else { re = '' }
-
-    const jsonString = '{"Value":"' + object.Value.replace(re, '') + '",' +
-                            '"Max":"' + object.Max.replace(re, '') + '",' +
-                            '"Min":"' + object.Min.replace(re, '') + '"}'
+    const jsonString = '{"Value":"' + object.Value.replace(re, '').replace(re2, '.') + '",' +
+                            '"Max":"' + object.Max.replace(re, '').replace(re2, '.') + '",' +
+                            '"Min":"' + object.Min.replace(re, '').replace(re2, '.') + '"}'
 
     branch.push(object.Text)
     branch.push(jsonString)

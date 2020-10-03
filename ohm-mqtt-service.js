@@ -58,7 +58,7 @@ function installService () {
   // Listen for the "start" event and let us know when the
   // process has actually started working.
   svc.on('start', function () {
-    console.log(svc.name + 'has been installed and is running')
+    console.log(svc.name + ' has been installed and is running')
   })
 
   // Install the script as a service.

@@ -2,6 +2,8 @@
 
 Continuously reads Open Hardware Monitor measurements from build in web-server JSON export and publishes to MQTT broker
 
+I wanted to read measurements including temperature. Turns out that many of the tools I found sending data to MQTT were not able to also send temperature information. Since this and more information is easily accessible through Open Hardware Monitor, I decided to pull together this small script to do the transfer.
+
 ## Installation
 
 1. Install Open Hardware Monitor from https://openhardwaremonitor.org/
@@ -19,8 +21,8 @@ Continuously reads Open Hardware Monitor measurements from build in web-server J
 
 4. Use command-line to clone this repository to local machine folder and install dependencies
     ```
-    git clone https://github.com/jacques42/ohw-mqtt ohw-mqtt
-    cd ohw-mqtt
+    git clone https://github.com/jacques42/ohw-mqtt ohm-mqtt
+    cd ohm-mqtt
     npm install
     ```
     
@@ -85,3 +87,6 @@ node ohm-mqtt-service.js -i --options '-c --jsonurl http://10.0.0.10:8085/data.j
                                           --mqttUsername username \
                                           --mqttPassword password'
 ```
+
+## Todo
+* Read sensor data from WMI (Windows Management Instrumentation) instead of JSON. 
