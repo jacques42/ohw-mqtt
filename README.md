@@ -1,8 +1,10 @@
-# ohw-mqtt
+# ohm-mqtt
 
 Continuously reads Open Hardware Monitor measurements from build in web-server JSON export and publishes to MQTT broker
 
 I wanted to read measurements including temperature. Turns out that many of the tools I found sending data to MQTT were not able to also send temperature information. Since this and more information is easily accessible through Open Hardware Monitor, I decided to pull together this small script to do the transfer.
+
+The main intent of this script is to make data available via MQTT and in un-nested JSON format, best suited to be processed with the wonderful [mqttwarn](https://github.com/jpmens/mqttwarn) (https://github.com/jpmens/mqttwarn)
 
 ## Installation
 

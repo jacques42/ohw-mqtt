@@ -40,9 +40,21 @@ const config = require('./cli.js')
 const os = require('os')
 const mqttLib = require('mqtt')
 
+// Base Topic
 config.mqttTopic = config.mqttTopic.toLowerCase() + '/' + os.hostname().toLowerCase()
 
-const mqttClient = mqttLib.connect(config.mqttBroker, { username: config.mqttUsername, password: config.mqttPassword })
+// Options
+const mqttOptions =  {
+  username: config.mqttUsername, 
+  password: config.mqttPassword,
+  will: {
+    topic: config.mqttTopic + '/status',
+    payload: Buffer.from('{"Host":"'+os.hostname+'","Status":"Disconnected"}'), // Payloads are buffers
+    qos: 0
+  }
+}
+
+const mqttClient = mqttLib.connect(config.mqttBroker, mqttOptions)
 
 mqttClient.on('error', function (err) {
   // increase reconnect timer and exit if expired
@@ -55,7 +67,10 @@ mqttClient.on('close', function (err) {
 })
 
 mqttClient.on('connect', function () {
-  // do nothing
+  // Publish power-on message
+  mqttClient.publish(config.mqttTopic + '/status','{"Host":"'+os.hostname+'","Status":"Connected"}');
+
+  // register last will message for power-off
 })
 
 /*
