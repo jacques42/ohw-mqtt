@@ -6,10 +6,30 @@ const filename = require('path').join(__dirname, '\\', 'index.js')
 const serviceName = 'ohm-mqtt'
 
 const cliDefinition = [
-  { name: 'help', alias: 'h', type: Boolean, description: 'Display this usage guide.' },
-  { name: 'install', alias: 'i', type: Boolean, description: 'Install ohm-mqtt as Windows Service' },
-  { name: 'uninstall', alias: 'u', type: Boolean, description: 'Uninstall ohm-mqtt Windows Service' },
-  { name: 'options', type: String, description: 'Commandline options to pass to script\nKnown bug: first option can not start with \'--\'. To work around use \'-c\' or \'-f\' as first parameter' }
+  {
+    name: 'help',
+    alias: 'h',
+    type: Boolean,
+    description: 'Display this usage guide.'
+  },
+  {
+    name: 'install',
+    alias: 'i',
+    type: Boolean,
+    description: 'Install ohm-mqtt as Windows Service'
+  },
+  {
+    name: 'uninstall',
+    alias: 'u',
+    type: Boolean,
+    description: 'Uninstall ohm-mqtt Windows Service'
+  },
+  {
+    name: 'options',
+    type: String,
+    description:
+            "Commandline options to pass to script\nKnown bug: first option can not start with '--'. To work around use '-c' or '-f' as first parameter"
+  }
 ]
 
 const cliParameter = commandLineArgs(cliDefinition)
@@ -35,7 +55,8 @@ function installService () {
   // Create a new service object
   var svc = new Service({
     name: serviceName,
-    description: 'Reads Open Hardware Monitor measurements from JSON export and publishes to MQTT broker',
+    description:
+            'Reads Open Hardware Monitor measurements from JSON export and publishes to MQTT broker',
     script: filename,
     scriptOptions: cliParameter.options,
     env: {
@@ -88,14 +109,16 @@ function showHelp () {
   const usage = commandLineUsage([
     {
       header: 'ohm-mqtt-service',
-      content: 'Install ohm-mqtt as a Windows Service, for start-up at boot time '
+      content:
+                'Install ohm-mqtt as a Windows Service, for start-up at boot time '
     },
     {
       header: 'Options',
       optionList: cliDefinition
     },
     {
-      content: 'Project home: {underline https://github.com/jacques42/ohm-mqtt}'
+      content:
+                'Project home: {underline https://github.com/jacques42/ohm-mqtt}'
     }
   ])
   console.log(usage)

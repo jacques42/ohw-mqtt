@@ -9,17 +9,33 @@ process.on('uncaughtException', handleError)
 function handleError (error) {
   if (error.response) {
     // The request was made and the server responded with a status code out of range of 2xx
-    handleError(new Error('URL GET response: <' + error.response.status + '>'))
+    handleError(
+      new Error('URL GET response: <' + error.response.status + '>')
+    )
   } else if (error.request) {
     switch (error.errno) {
       case 'ENOTFOUND':
-        handleError(new Error('Unable to resolve / reach hostname <' + error.hostname + '>'))
+        handleError(
+          new Error(
+            'Unable to resolve / reach hostname <' +
+                            error.hostname +
+                            '>'
+          )
+        )
         break
       case 'ECONNREFUSED':
-        handleError(new Error('Connection refused by server <' + error.address + '>'))
+        handleError(
+          new Error(
+            'Connection refused by server <' + error.address + '>'
+          )
+        )
         break
       default:
-        handleError(new Error('No URL GET response received <' + error.toJSON() + '>'))
+        handleError(
+          new Error(
+            'No URL GET response received <' + error.toJSON() + '>'
+          )
+        )
     }
   } else {
     console.error(error.toString())
@@ -29,27 +45,30 @@ function handleError (error) {
 }
 
 /*
-** Defaults + Commandline
-*/
+ ** Defaults + Commandline
+ */
 
 const config = require('./cli.js')
 
 /*
-** Establish MQTT Server Connection
-*/
+ ** Establish MQTT Server Connection
+ */
 const os = require('os')
 const mqttLib = require('mqtt')
 
 // Base Topic
-config.mqttTopic = config.mqttTopic.toLowerCase() + '/' + os.hostname().toLowerCase()
+config.mqttTopic =
+    config.mqttTopic.toLowerCase() + '/' + os.hostname().toLowerCase()
 
 // Options
-const mqttOptions =  {
-  username: config.mqttUsername, 
+const mqttOptions = {
+  username: config.mqttUsername,
   password: config.mqttPassword,
   will: {
     topic: config.mqttTopic + '/status',
-    payload: Buffer.from('{"Host":"'+os.hostname+'","Status":"Disconnected"}'), // Payloads are buffers
+    payload: Buffer.from(
+      '{"Host":"' + os.hostname + '","Status":"Disconnected"}'
+    ), // Payloads are buffers
     qos: 0
   }
 }
@@ -68,19 +87,23 @@ mqttClient.on('close', function (err) {
 
 mqttClient.on('connect', function () {
   // Publish power-on message
-  mqttClient.publish(config.mqttTopic + '/status','{"Host":"'+os.hostname+'","Status":"Connected"}');
+  mqttClient.publish(
+    config.mqttTopic + '/status',
+    '{"Host":"' + os.hostname + '","Status":"Connected"}'
+  )
 
   // register last will message for power-off
 })
 
 /*
-** Open URL, Read file, send to MQTT
+ ** Open URL, Read file, send to MQTT
  */
 
 const httpClient = require('axios')
 
 function loopForever () {
-  httpClient.get(config.jsonurl)
+  httpClient
+    .get(config.jsonurl)
     .then(verifyServerResponse)
     .then(transformJSONData)
     .then(filterData)
@@ -93,7 +116,9 @@ loopForever()
 
 function transformJSONData (data) {
   // no data transformation when raw requested
-  if (config.sendRawData) { return data }
+  if (config.sendRawData) {
+    return data
+  }
 
   // Transform JSON data - mqttwarn can not process nested structures
   return recursiveParser(data.Children)
@@ -114,19 +139,36 @@ function recursiveParser (string1, string2 = [], var1 = 0, array1 = []) {
     if (typeof object[property] === 'object') {
       if (typeof object.Text !== 'undefined') {
         branch.push(object.Text)
-        dataArray = recursiveParser(object[property], branch, level + 1, dataArray)
+        dataArray = recursiveParser(
+          object[property],
+          branch,
+          level + 1,
+          dataArray
+        )
         branch.pop()
       } else {
-        dataArray = recursiveParser(object[property], branch, level + 1, dataArray)
+        dataArray = recursiveParser(
+          object[property],
+          branch,
+          level + 1,
+          dataArray
+        )
       }
     }
   }
 
   // Exit clause - value field set means measurement found ( => tree leaf node)
   if (typeof object.Value !== 'undefined' && object.Value.length > 0) {
-    const jsonString = '{"Value":"' + object.Value.replace(re, '').replace(re2, '.') + '",' +
-                            '"Max":"' + object.Max.replace(re, '').replace(re2, '.') + '",' +
-                            '"Min":"' + object.Min.replace(re, '').replace(re2, '.') + '"}'
+    const jsonString =
+            '{"Value":"' +
+            object.Value.replace(re, '').replace(re2, '.') +
+            '",' +
+            '"Max":"' +
+            object.Max.replace(re, '').replace(re2, '.') +
+            '",' +
+            '"Min":"' +
+            object.Min.replace(re, '').replace(re2, '.') +
+            '"}'
 
     branch.push(object.Text)
     branch.push(jsonString)
@@ -144,7 +186,7 @@ function filterData (data) {
   }
 
   // filter by ID or Text value - filterMode defines ALLOW or DENY approach when match is found
-  return data.filter(element => {
+  return data.filter((element) => {
     switch (config.filterType) {
       case 'id':
         if (config.filterPattern.indexOf(element[0]) !== -1) {
@@ -152,9 +194,11 @@ function filterData (data) {
         }
         break
       case 'text':
-        if (config.filterPattern.filter(pattern => {
-          return (element.indexOf(pattern) !== -1)
-        }).length > 0) {
+        if (
+          config.filterPattern.filter((pattern) => {
+            return element.indexOf(pattern) !== -1
+          }).length > 0
+        ) {
           return config.filterMode
         }
         break
@@ -174,9 +218,12 @@ function publishToMQTT (data) {
     mqttClient.publish(config.mqttTopic, JSON.stringify(data))
   } else {
     // Publish by topic
-    data.forEach(element => {
+    data.forEach((element) => {
       var mqttData = element.pop()
-      var mqttTopic = config.mqttTopic + '/' + element.join('/').replace(/[#+]/g, '').replace(/\s/g, '-')
+      var mqttTopic =
+                config.mqttTopic +
+                '/' +
+                element.join('/').replace(/[#+]/g, '').replace(/\s/g, '-')
       //        console.log(mqttTopic + " -> " + mqttData)
 
       mqttClient.publish(mqttTopic, mqttData)
@@ -185,7 +232,15 @@ function publishToMQTT (data) {
 }
 
 function verifyServerResponse (obj) {
-  if (obj.headers['content-type'] !== 'application/json') { handleError(new Error('Data from Webserver URL is not in JSON format (content type <' + obj.headers['content-type'] + '>)')) }
+  if (obj.headers['content-type'] !== 'application/json') {
+    handleError(
+      new Error(
+        'Data from Webserver URL is not in JSON format (content type <' +
+                    obj.headers['content-type'] +
+                    '>)'
+      )
+    )
+  }
 
   return obj.data
 }

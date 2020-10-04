@@ -20,6 +20,12 @@
     "eslint-plugin-promise": "^4.2.1",
     "eslint-plugin-standard": "^4.0.1"
   },
+  "prettier" : {
+      "trailingComma": "es5",
+      "tabWidth": 4,
+      "semi": false,
+      "singleQuote": true
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
